@@ -1,0 +1,42 @@
+import numpy as np
+import pandas as pd
+
+def preprocess_papers():
+
+	with open("datasets/paper_features_list",'r') as f:
+			line = f.readline()
+			feature_list = line.rstrip('\n').split(';')
+	f.close()
+
+	n_papers = 675
+	n_features = len(feature_list)
+
+	id_papers = {}
+
+	zero_data = np.zeros(shape=(n_papers, n_features))
+	df = pd.DataFrame(zero_data, columns=feature_list)
+
+	with open("datasets/papers.dat") as f:
+		ms = 0
+		for line in f:
+			tmp = line.rstrip('\n').split(';')
+			id_papers[ms] = [tmp[0],float(tmp[len(tmp)-1])]
+			df['c'][ms] = float(tmp[len(tmp)-1])
+			for i in tmp[1:len(tmp)-1]:
+				a = i.split(':')
+				if(len(a)==2):
+					df[feature_list[int(a[0])+1]][ms] = float(a[1])
+			ms += 1
+	f.close()
+	
+	X = df.ix[:,1:6]
+	X = X.as_matrix()
+
+	df['c'] = df['c'].astype(int)
+
+	Y = df.ix[:,0:1]
+	Y = Y.as_matrix()
+
+	return X, Y, [0,1,2,3]
+
+

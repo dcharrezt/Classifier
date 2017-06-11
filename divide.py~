@@ -44,4 +44,4 @@ def buckets(filename, bucketName, separator, classColumn):
         f.close()
 
 # example of how to use this code          
-buckets("datasets/athletes", 'athletes',',',1)
+buckets("datasets/athletes", 'athletes',',',2)

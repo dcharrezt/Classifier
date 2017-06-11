@@ -1,0 +1,34 @@
+import pandas as pd
+import numpy as np
+
+def preprocess_mpg():
+
+	feature_list =["class","f_1","f_2","f_3","f_4","f_5","c"]
+
+	df = pd.read_csv("datasets/mpg", names = feature_list)
+	df = df.drop("c", axis = 1)
+	df = df.sort(['class'])
+
+	classes = sorted(df['class'].unique())
+
+	c_dict = {}
+
+	for i in range(0,len(classes)):
+		c_dict[i] = classes[i]
+
+	tmp = []
+	for i in np.array(df["class"]):
+		tmp.append(classes.index(i))
+
+	df["class"] = tmp
+
+	X = df.ix[:,1:6]
+	X = X.as_matrix()
+
+	Y = df.ix[:,0:1]
+	Y = Y.as_matrix()
+
+	return X, Y, c_dict
+
+
+
